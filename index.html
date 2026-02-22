@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLMAT AUTO DESIGN | Premium Konfigüratör</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1d4ed8;
+            --primary-green: #15a015;
+            --bg-dark: #0a0a0a;
+            --card-white: #ffffff;
+            --accent-red: #c00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-dark); color: #fff; padding: 15px; }
+        .container { max-width: 1350px; margin: 0 auto; }
+
+        /* HEADER */
+        .brand-header { margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .brand-header h1 { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
+        .brand-header span { color: var(--accent-red); }
+
+        /* ARAÇ SEÇİMİ */
+        .vehicle-nav {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            border: 1px solid #333;
+        }
+
+        .input-box { display: flex; flex-direction: column; gap: 5px; }
+        .input-box label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; }
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #252525;
+            color: white;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+        select:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* ANA PANEL */
+        .config-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+
+        .preview-box {
+            background-color: #f3f4f6;
+            border-radius: 15px;
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .layers { position: relative; width: 500px; height: 500px; }
+        .layers img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: contain;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #z-base { z-index: 10; }
+        #z-border { z-index: 20; }
+        #z-heel { z-index: 30; }
+        #z-logo { z-index: 40; }
+
+        /* SEÇENEK PANELİ */
+        .options-box {
+            background-color: var(--card-white);
+            border-radius: 15px;
+            padding: 20px;
+            color: #111;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-height: 850px;
+            overflow-y: auto;
+        }
+
+        .section-h { font-size: 12px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; color: #444; }
+        .section-h::after { content: ''; flex: 1; height: 1px; background: #eee; }
+
+        /* SWATCHLAR */
+        .swatch-container { display: grid; gap: 8px; margin-bottom: 20px; }
+        #paspas-colors { grid-template-columns: repeat(6, 1fr); }
+        #kenar-colors { grid-template-columns: repeat(9, 1fr); } /* 9'lu Kompakt Grid */
+
+        .swatch { cursor: pointer; text-align: center; }
+        .swatch input { display: none; }
+        .swatch-thumb {
+            width: 100%; aspect-ratio: 1;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            background-size: cover;
+            background-position: center;
+            transition: 0.2s;
+        }
+
+        .swatch input:checked + .swatch-thumb { border-color: var(--primary-blue); transform: scale(1.15); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+        .swatch span { font-size: 7px; font-weight: 700; color: #888; margin-top: 3px; display: block; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* EKLENTİLER */
+        .addon-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px; border: 1px solid #eee; border-radius: 10px;
+            margin-bottom: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .addon-row:hover { background: #f9f9f9; }
+        .addon-info h4 { font-size: 11px; font-weight: 800; }
+        .addon-info p { font-size: 10px; color: #999; }
+        .cb { width: 18px; height: 18px; accent-color: var(--primary-blue); cursor: pointer; }
+
+        /* ÖZET VE FİYAT */
+        .bottom-bar {
+            background: #fff; border-radius: 15px; padding: 20px; margin-top: 20px;
+            display: flex; justify-content: space-between; align-items: center; color: #111;
+        }
+        .total-price { font-size: 28px; font-weight: 900; color: #000; letter-spacing: -1px; }
+        .old-p { text-decoration: line-through; color: #aaa; font-size: 14px; margin-right: 8px; }
+
+        .btn-act { display: flex; gap: 10px; }
+        .button { padding: 15px 25px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.3s; }
+        .btn-buy { background: var(--primary-green); color: white; }
+        .btn-cart { background: var(--primary-blue); color: white; }
+        .button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        @media (max-width: 950px) { .config-grid { grid-template-columns: 1fr; } .vehicle-nav { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="brand-header"><h1>POLMAT <span>AUTO DESIGN</span></h1></header>
+
+    <div class="vehicle-nav">
+        <div class="input-box"><label>Araç Markası</label><select id="b-sel" onchange="loadModels()"><option value="">Marka Seçin...</option></select></div>
+        <div class="input-box"><label>Model</label><select id="m-sel" disabled onchange="loadYears()"><option value="">Önce Marka</option></select></div>
+        <div class="input-box"><label>Model Yılı</label><select id="y-sel" disabled onchange="refresh()"><option value="">Önce Model</option></select></div>
+    </div>
+
+    <div class="config-grid">
+        <div class="preview-box">
+            <div class="layers">
+                <img src="images/EVA/paspas-takimi-bej.png" id="z-base">
+                <img src="images/kenarlik/4-mattclass-paspas-kenarlik-pembe.png" id="z-border">
+                <img src="images/topukluk/paspas-takimi-metal-topukluk.png" id="z-heel" style="display:none;">
+                <img src="images/logo/paspas-takimi-marka-logo.png" id="z-logo">
+            </div>
+        </div>
+
+        <div class="options-box">
+            <h3 class="section-h">Paspas Rengi (EVA)</h3>
+            <div class="swatch-container" id="paspas-colors"></div>
+
+            <h3 class="section-h">Kenarlık Rengi</h3>
+            <div class="swatch-container" id="kenar-colors"></div>
+
+            <h3 class="section-h">Eklentiler</h3>
+            <div class="addon-row" onclick="clickAddon('cb-heel')">
+                <div class="addon-info" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" id="cb-heel" class="cb" onchange="refresh()">
+                    <div><h4>METAL TOPUKLUK</h4><p>Dayanıklılık artırır (+349 ₺)</p></div>
+                </div>
+            </div>
+            <div class="addon-row" onclick="clickAddon('cb-logo')">
+                <div class="addon-info" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" id="cb-logo" class="cb" checked onchange="refresh()">
+                    <div><h4>MARKA LOGOSU</h4><p>Ön iki paspas (0 ₺)</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div>
+            <p id="sum-text" style="font-weight: 800; font-size: 15px;">Araç seçimi bekleniyor...</p>
+            <p id="sum-detail" style="font-size: 12px; color: #777;">Premium Kişiye Özel Üretim</p>
+        </div>
+        <div style="text-align: right;">
+            <span class="old-p">2.499,00 ₺</span>
+            <div class="total-price" id="price-tag">1.599,00 ₺</div>
+            <div class="btn-act"><button class="button btn-cart">Sepete Ekle</button><button class="button btn-buy">Sipariş Ver</button></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const matColors = [
+        { name: "BEJ", file: "paspas-takimi-bej.png" }, { name: "BORDO", file: "paspas-takimi-bordo.png" },
+        { name: "FÜME", file: "paspas-takimi-fume.png" }, { name: "GRİ", file: "paspas-takimi-gri.png" },
+        { name: "KAHVE", file: "paspas-takimi-kahve.png" }, { name: "KIRMIZI", file: "paspas-takimi-kirmizi.png" },
+        { name: "LACİV.", file: "paspas-takimi-lacivert.png" }, { name: "PEMBE", file: "paspas-takimi-pembe.png" },
+        { name: "SİYAH", file: "paspas-takimi-siyah.png" }, { name: "TABA", file: "paspas-takimi-taba.png" },
+        { name: "TURUNCU", file: "paspas-takimi-turuncu-taba.png" }
+    ];
+
+    const borderColors = [
+        { name: "PEMBE", file: "paspas-takimi-kenarlik-pembe.png", hex: "#D87093" },
+        { name: "A.YEŞİL", file: "paspas-takimi-kenarlik-acik-yesil.png", hex: "#9ACD32" },
+        { name: "TURUNCU", file: "paspas-takimi-kenarlik-turuncu.png", hex: "#FF8C00" },
+        { name: "TURKUAZ", file: "paspas-takimi-kenarlik-turkuaz.png", hex: "#40E0D0" },
+        { name: "TABA", file: "paspas-takimi-kenarlik-taba.png", hex: "#8B4513" },
+        { name: "SİYAH", file: "paspas-takimi-kenarlik-siyah.png", hex: "#000000" },
+        { name: "SARI", file: "paspas-takimi-kenarlik-sari.png", hex: "#FFD700" },
+        { name: "MOR", file: "paspas-takimi-kenarlik-mor.png", hex: "#800080" },
+        { name: "MAVİ", file: "paspas-takimi-kenarlik-mavi.png", hex: "#0000FF" },
+        { name: "LACİV.", file: "paspas-takimi-kenarlik-lacivert.png", hex: "#000080" },
+        { name: "K.YEŞİL", file: "paspas-takimi-kenarlik-koyu-yesil.png", hex: "#006400" },
+        { name: "KIRMIZI", file: "paspas-takimi-kenarlik-kirmizi.png", hex: "#FF0000" },
+        { name: "KAHVE", file: "paspas-takimi-kenarlik-kahve.png", hex: "#4B3621" },
+        { name: "GRİ", file: "paspas-takimi-kenarlik-gri.png", hex: "#808080" },
+        { name: "FÜME", file: "paspas-takimi-kenarlik-fume.png", hex: "#3B3B3B" },
+        { name: "BORDO", file: "paspas-takimi-kenarlik-bordo.png", hex: "#800000" },
+        { name: "BEJ", file: "paspas-takimi-kenarlik-bej.png", hex: "#F5F5DC" }
+    ];
+
+    // s: Start Year, e: End Year (Boşsa 2026'ya kadar)
+    const cars = {
+        "Abarth": [{m:"500",s:2008}, {m:"595",s:2012}, {m:"695",s:2010}],
+        "Aion": [{m:"V",s:2020}, {m:"S",s:2019}, {m:"LX",s:2019}],
+        "Alfa Romeo": [{m:"Giulietta",s:2010,e:2020}, {m:"Giulia",s:2016}, {m:"Stelvio",s:2017}, {m:"Tonale",s:2022}, {m:"159",s:2005,e:2011}, {m:"Mito",s:2008,e:2018}, {m:"147",s:2000,e:2010}, {m:"156",s:1997,e:2007}],
+        "Alpine": [{m:"A110",s:2017}],
+        "Anadol": [{m:"A1",s:1966,e:1975}, {m:"A2",s:1970,e:1981}, {m:"STC-16",s:1973,e:1975}],
+        "Arora": [{m:"S1",s:2020}, {m:"M1",s:2021}],
+        "Aston Martin": [{m:"DBX",s:2020}, {m:"Vantage",s:2005}, {m:"DB11",s:2016}, {m:"DBS",s:2007}, {m:"Rapide",s:2010}],
+        "Audi": [{m:"A1",s:2010}, {m:"A3 Sedan",s:2013}, {m:"A3 Sportback",s:1996}, {m:"A4",s:1994}, {m:"A5",s:2007}, {m:"A6",s:1994}, {m:"A7",s:2010}, {m:"A8",s:1994}, {m:"Q2",s:2016}, {m:"Q3",s:2011}, {m:"Q5",s:2008}, {m:"Q7",s:2005}, {m:"Q8",s:2018}, {m:"RS Serisi",s:1994}, {m:"e-tron",s:2018}],
+        "Bentley": [{m:"Continental",s:2003}, {m:"Bentayga",s:2015}, {m:"Flying Spur",s:2005}],
+        "BMW": [{m:"1 Serisi",s:2004}, {m:"2 Serisi",s:2014}, {m:"3 Serisi",s:1975}, {m:"4 Serisi",s:2013}, {m:"5 Serisi",s:1972}, {m:"6 Serisi",s:1976}, {m:"7 Serisi",s:1977}, {m:"8 Serisi",s:1989}, {m:"X1",s:2009}, {m:"X2",s:2017}, {m:"X3",s:2003}, {m:"X4",s:2014}, {m:"X5",s:1999}, {m:"X6",s:2008}, {m:"X7",s:2018}, {m:"iX",s:2021}, {m:"i4",s:2021}, {m:"i7",s:2022}, {m:"M Serisi",s:1972}],
+        "Buick": [{m:"Enclave",s:2007}, {m:"Encore",s:2012}],
+        "BYD": [{m:"Atto 3",s:2022}, {m:"Han",s:2020}, {m:"Tang",s:2018}, {m:"Seal",s:2022}],
+        "Cadillac": [{m:"Escalade",s:1999}, {m:"XT5",s:2016}, {m:"CTS",s:2002,e:2019}],
+        "Chery": [{m:"Omoda 5",s:2022}, {m:"Tiggo 7 Pro",s:2020}, {m:"Tiggo 8 Pro",s:2020}],
+        "Chevrolet": [{m:"Aveo",s:2002,e:2020}, {m:"Cruze",s:2008,e:2023}, {m:"Captiva",s:2006}, {m:"Camaro",s:1966}, {m:"Corvette",s:1953}, {m:"Spark",s:1998}, {m:"Trax",s:2012}],
+        "Chrysler": [{m:"300C",s:2004}, {m:"Grand Voyager",s:1988}],
+        "Citroen": [{m:"C3",s:2002}, {m:"C3 Aircross",s:2017}, {m:"C4",s:2004}, {m:"C4 X",s:2022}, {m:"C5 Aircross",s:2017}, {m:"C-Elysee",s:2012}, {m:"Ami",s:2020}, {m:"Berlingo",s:1996}],
+        "Cupra": [{m:"Formentor",s:2020}, {m:"Leon",s:2020}, {m:"Ateca",s:2020}, {m:"Born",s:2021}],
+        "Dacia": [{m:"Sandero",s:2008}, {m:"Sandero Stepway",s:2009}, {m:"Duster",s:2010}, {m:"Jogger",s:2022}, {m:"Lodgy",s:2012,e:2022}, {m:"Logan",s:2004}],
+        "Daewoo": [{m:"Lanos",s:1997,e:2002}, {m:"Matiz",s:1998,e:2005}],
+        "Daihatsu": [{m:"Terios",s:1997}, {m:"Sirion",s:1998}, {m:"Cuore",s:1980}],
+        "Dodge": [{m:"Challenger",s:1970}, {m:"Charger",s:1966}, {m:"Ram",s:1981}],
+        "DS Automobiles": [{m:"DS 3",s:2009}, {m:"DS 4",s:2011}, {m:"DS 7",s:2017}, {m:"DS 9",s:2020}],
+        "Eagle": [{m:"Talon",s:1990,e:1998}],
+        "Ferrari": [{m:"458",s:2009,e:2015}, {m:"488",s:2015,e:2019}, {m:"F8",s:2019}, {m:"Roma",s:2020}, {m:"SF90",s:2019}],
+        "Fiat": [{m:"Egea Sedan",s:2015}, {m:"Egea Cross",s:2021}, {m:"Egea HB",s:2015}, {m:"500",s:2007}, {m:"500X",s:2014}, {m:"500L",s:2012}, {m:"Panda",s:1980}, {m:"Doblo",s:2000}, {m:"Fiorino",s:1977}, {m:"Linea",s:2007,e:2018}, {m:"Punto",s:1993,e:2018}, {m:"Albea",s:2002,e:2012}, {m:"Palio",s:1996,e:2011}],
+        "Ford": [{m:"Fiesta",s:1976,e:2023}, {m:"Focus",s:1998}, {m:"Puma",s:2019}, {m:"Kuga",s:2008}, {m:"Mondeo",s:1992,e:2022}, {m:"Mustang Mach-E",s:2020}, {m:"Courier",s:2014}, {m:"Connect",s:2002}, {m:"Transit",s:1965}, {m:"Ranger",s:1983}],
+        "Geely": [{m:"Emgrand",s:2009}],
+        "Honda": [{m:"Civic",s:1972}, {m:"City",s:1981}, {m:"Accord",s:1976}, {m:"HR-V",s:1998}, {m:"CR-V",s:1995}, {m:"Jazz",s:2001}, {m:"NSX",s:1990}],
+        "Hyundai": [{m:"i10",s:2007}, {m:"i20",s:2008}, {m:"i30",s:2007}, {m:"Elantra",s:1990}, {m:"Bayon",s:2021}, {m:"Kona",s:2017}, {m:"Tucson",s:2004}, {m:"Santa Fe",s:2000}, {m:"Ioniq 5",s:2021}, {m:"Ioniq 6",s:2022}, {m:"Staria",s:2021}, {m:"Accent Blue",s:2011,e:2019}, {m:"Accent Era",s:2006,e:2012}, {m:"Getz",s:2002,e:2011}],
+        "I-GO": [{m:"Eco",s:2022}],
+        "Ikco": [{m:"Samand",s:2003}],
+        "Infiniti": [{m:"Q50",s:2013}, {m:"QX70",s:2013}],
+        "Jaguar": [{m:"XF",s:2007}, {m:"XE",s:2015}, {m:"F-Pace",s:2016}, {m:"I-Pace",s:2018}],
+        "Joyce": [{m:"One",s:2023}],
+        "Kia": [{m:"Picanto",s:2004}, {m:"Rio",s:2000}, {m:"Stonic",s:2017}, {m:"Ceed",s:2006}, {m:"XCeed",s:2019}, {m:"Sportage",s:1993}, {m:"Sorento",s:2002}, {m:"Niro",s:2016}, {m:"EV6",s:2021}, {m:"EV9",s:2023}, {m:"Cerato",s:2003}],
+        "Kuba": [{m:"K-3",s:2022}],
+        "Lada": [{m:"Niva",s:1977}, {m:"Samara",s:1984,e:2013}, {m:"Vega",s:1995,e:2009}],
+        "Lamborghini": [{m:"Urus",s:2018}, {m:"Huracan",s:2014}, {m:"Aventador",s:2011,e:2022}],
+        "Lancia": [{m:"Delta",s:1979,e:2014}, {m:"Ypsilon",s:1995}],
+        "Leapmotor": [{m:"T03",s:2020}],
+        "Lexus": [{m:"RX",s:1998}, {m:"NX",s:2014}, {m:"ES",s:1989}, {m:"LS",s:1989}],
+        "Ligier": [{m:"JS50",s:2012}],
+        "Lincoln": [{m:"Navigator",s:1997}, {m:"Aviator",s:2002}],
+        "Lotus": [{m:"Emira",s:2022}],
+        "Luqi": [{m:"HL",s:2022}],
+        "Marcos": [{m:"Mantis",s:1997}],
+        "Maserati": [{m:"Ghibli",s:1967}, {m:"Levante",s:2016}, {m:"Quattroporte",s:1963}, {m:"Grecale",s:2022}],
+        "Mazda": [{m:"3",s:2003}, {m:"6",s:2002}, {m:"CX-5",s:2012}, {m:"CX-3",s:2015}, {m:"MX-5",s:1989}],
+        "Mercedes-Benz": [{m:"A Serisi",s:1997}, {m:"B Serisi",s:2005}, {m:"C Serisi",s:1993}, {m:"E Serisi",s:1993}, {m:"S Serisi",s:1972}, {m:"CLA",s:2013}, {m:"CLS",s:2004}, {m:"GLA",s:2013}, {m:"GLB",s:2019}, {m:"GLC",s:2015}, {m:"GLE",s:2015}, {m:"GLS",s:2016}, {m:"G Serisi",s:1979}, {m:"EQA",s:2021}, {m:"EQB",s:2021}, {m:"EQC",s:2019}, {m:"EQE",s:2022}, {m:"EQS",s:2021}, {m:"Vito",s:1996}, {m:"Citan",s:2012}],
+        "MG": [{m:"ZS",s:2017}, {m:"HS",s:2018}, {m:"MG4",s:2022}, {m:"MG5",s:2012}],
+        "Micro": [{m:"Microlino",s:2022}],
+        "Mini": [{m:"Cooper",s:1959}, {m:"Clubman",s:2007}, {m:"Countryman",s:2010}],
+        "Mitsubishi": [{m:"Lancer",s:1973,e:2017}, {m:"ASX",s:2010}, {m:"L200",s:1978}, {m:"Pajero",s:1982,e:2021}, {m:"Space Star",s:1998}],
+        "Morgan": [{m:"Plus 4",s:1950}],
+        "Nieve": [{m:"Eco",s:2022}],
+        "Nissan": [{m:"Micra",s:1982}, {m:"Juke",s:2010}, {m:"Qashqai",s:2006}, {m:"X-Trail",s:2000}, {m:"Navara",s:1985}, {m:"Pulsar",s:1978,e:2018}, {m:"Note",s:2004}],
+        "Opel": [{m:"Corsa",s:1982}, {m:"Astra",s:1991}, {m:"Mokka",s:2012}, {m:"Crossland",s:2017}, {m:"Grandland",s:2017}, {m:"Insignia",s:2008,e:2022}, {m:"Combo",s:1986}, {m:"Zafira",s:1999}, {m:"Vectra",s:1988,e:2008}],
+        "Orti": [{m:"EV",s:2022}],
+        "Peugeot": [{m:"208",s:2012}, {m:"308",s:2007}, {m:"408",s:2022}, {m:"508",s:2010}, {m:"2008",s:2013}, {m:"3008",s:2008}, {m:"5008",s:2009}, {m:"Rifter",s:2018}, {m:"Partner",s:1996}, {m:"206",s:1998,e:2012}, {m:"207",s:2006,e:2014}, {m:"301",s:2012}, {m:"307",s:2001,e:2008}, {m:"407",s:2004,e:2011}],
+        "Plymouth": [{m:"Road Runner",s:1968,e:1980}],
+        "Polestar": [{m:"2",s:2020}],
+        "Pontiac": [{m:"GTO",s:1964,e:2006}, {m:"Firebird",s:1967,e:2002}],
+        "Porsche": [{m:"911",s:1963}, {m:"Taycan",s:2019}, {m:"Panamera",s:2009}, {m:"Macan",s:2014}, {m:"Cayenne",s:2002}],
+        "Proton": [{m:"Gen-2",s:2004,e:2012}, {m:"Savvy",s:2005,e:2011}],
+        "Rainwoll": [{m:"RW",s:2022}],
+        "Reeder": [{m:"Reev",s:2023}],
+        "Regal Raptor": [{m:"K5",s:2022}],
+        "Relive": [{m:"BAW",s:2022}],
+        "Renault": [{m:"Clio",s:1990}, {m:"Taliant",s:2021}, {m:"Megane Sedan",s:1995}, {m:"Megane HB",s:1995}, {m:"Austral",s:2022}, {m:"Captur",s:2013}, {m:"Koleos",s:2007}, {m:"Zoe",s:2012}, {m:"Kangoo",s:1997}, {m:"Fluence",s:2009,e:2016}, {m:"Symbol",s:1999,e:2021}, {m:"Kadjar",s:2015,e:2022}, {m:"Laguna",s:1993,e:2015}, {m:"Scenic",s:1996}],
+        "RKS": [{m:"M5",s:2022}],
+        "Rolls-Royce": [{m:"Phantom",s:1925}, {m:"Cullinan",s:2018}, {m:"Ghost",s:2009}],
+        "Rover": [{m:"75",s:1998,e:2005}],
+        "Saab": [{m:"9-3",s:1998,e:2014}, {m:"9-5",s:1997,e:2012}],
+        "Saipa": [{m:"Tiba",s:2009}],
+        "Seat": [{m:"Ibiza",s:1984}, {m:"Leon",s:1998}, {m:"Arona",s:2017}, {m:"Ateca",s:2016}, {m:"Tarraco",s:2018}, {m:"Toledo",s:1991,e:2018}, {m:"Altea",s:2004,e:2015}],
+        "Skoda": [{m:"Fabia",s:1999}, {m:"Scala",s:2019}, {m:"Octavia",s:1996}, {m:"Superb",s:2001}, {m:"Kamiq",s:2019}, {m:"Karoq",s:2017}, {m:"Kodiaq",s:2016}, {m:"Yeti",s:2009,e:2017}, {m:"Rapid",s:2012,e:2019}],
+        "Smart": [{m:"Fortwo",s:1998}, {m:"Forfour",s:2004}],
+        "Subaru": [{m:"Impreza",s:1992}, {m:"XV",s:2012}, {m:"Forester",s:1997}],
+        "Suzuki": [{m:"Swift",s:1983}, {m:"Vitara",s:1988}, {m:"Jimny",s:1970}, {m:"S-Cross",s:2006}],
+        "Tata": [{m:"Indica",s:1998}, {m:"Indigo",s:2002}],
+        "Tesla": [{m:"Model 3",s:2017}, {m:"Model Y",s:2020}, {m:"Model S",s:2012}, {m:"Model X",s:2015}],
+        "The London Taxi": [{m:"TX4",s:2007}],
+        "Tofaş": [{m:"Şahin",s:1988,e:2002}, {m:"Doğan",s:1988,e:2002}, {m:"Kartal",s:1988,e:2003}, {m:"Serçe",s:1984,e:1994}, {m:"Murat 124",s:1971,e:1976}, {m:"Murat 131",s:1977,e:1987}],
+        "TOGG": [{m:"T10X",s:2023}],
+        "Toyota": [{m:"Yaris",s:1999}, {m:"Corolla",s:1966}, {m:"Corolla Cross",s:2020}, {m:"C-HR",s:2016}, {m:"Rav4",s:1994}, {m:"Hilux",s:1968}, {m:"Proace City",s:2019}, {m:"Auris",s:2006,e:2018}, {m:"Avensis",s:1997,e:2018}, {m:"Verso",s:2002,e:2018}],
+        "Vanderhall": [{m:"Venice",s:2017}],
+        "Volkswagen": [{m:"Polo",s:1975}, {m:"Golf",s:1974}, {m:"T-Roc",s:2017}, {m:"Tiguan",s:2007}, {m:"Passat",s:1973}, {m:"Passat Variant",s:1973}, {m:"Arteon",s:2017}, {m:"Touareg",s:2002}, {m:"ID.4",s:2020}, {m:"Caddy",s:1980}, {m:"Amarok",s:2010}, {m:"Transporter",s:1950}, {m:"Jetta",s:1979,e:2023}, {m:"Scirocco",s:1974,e:2017}, {m:"Beetle",s:1938,e:2019}],
+        "Volta": [{m:"EV1",s:2022}, {m:"EV2",s:2023}],
+        "Volvo": [{m:"S60",s:2000}, {m:"S90",s:1996}, {m:"V40",s:1995,e:2019}, {m:"V60",s:2010}, {m:"V90",s:1996}, {m:"XC40",s:2017}, {m:"XC60",s:2008}, {m:"XC90",s:2002}],
+        "XEV": [{m:"Yoyo",s:2021}],
+        "Yuki": [{m:"Amy",s:2022}]
+    };
+
+    function initUI() {
+        const pC = document.getElementById('paspas-colors');
+        const kC = document.getElementById('kenar-colors');
+        const bS = document.getElementById('b-sel');
+
+        matColors.forEach((c, i) => {
+            pC.innerHTML += `<label class="swatch"><input type="radio" name="p" value="${c.file}" data-name="${c.name}" ${i===0?'checked':''} onchange="refresh()"><div class="swatch-thumb" style="background-image: url('images/EVA/${c.file}');"></div><span>${c.name}</span></label>`;
+        });
+
+        borderColors.forEach((c, i) => {
+            kC.innerHTML += `<label class="swatch"><input type="radio" name="k" value="${c.file}" data-name="${c.name}" ${i===0?'checked':''} onchange="refresh()"><div class="swatch-thumb" style="background-color: ${c.hex};"></div><span>${c.name}</span></label>`;
+        });
+
+        Object.keys(cars).sort().forEach(b => bS.innerHTML += `<option value="${b}">${b}</option>`);
+    }
+
+    function loadModels() {
+        const b = document.getElementById('b-sel').value;
+        const mS = document.getElementById('m-sel');
+        const yS = document.getElementById('y-sel');
+        mS.innerHTML = '<option value="">Model Seçin</option>';
+        yS.innerHTML = '<option value="">Yıl Seçin</option>';
+        if(b && cars[b]) {
+            cars[b].forEach((mo, i) => mS.innerHTML += `<option value="${i}">${mo.m}</option>`);
+            mS.disabled = false;
+        } else { mS.disabled = true; }
+        refresh();
+    }
+
+    function loadYears() {
+        const b = document.getElementById('b-sel').value;
+        const mI = document.getElementById('m-sel').value;
+        const yS = document.getElementById('y-sel');
+        yS.innerHTML = '<option value="">Yıl Seçin</option>';
+        if(mI !== "" && cars[b]) {
+            const d = cars[b][mI];
+            const end = d.e || 2026;
+            for(let i = 2026; i >= d.s; i--) { if(i <= end) yS.innerHTML += `<option value="${i}">${i}</option>`; }
+            yS.disabled = false;
+        } else { yS.disabled = true; }
+        refresh();
+    }
+
+    function refresh() {
+        const pI = document.querySelector('input[name="p"]:checked');
+        const kI = document.querySelector('input[name="k"]:checked');
+        const h = document.getElementById('cb-heel').checked;
+        const l = document.getElementById('cb-logo').checked;
+
+        if(pI) document.getElementById('z-base').src = `images/EVA/${pI.value}`;
+        if(kI) document.getElementById('z-border').src = `images/kenarlik/${kI.value}`;
+        document.getElementById('z-heel').style.display = h ? 'block' : 'none';
+        document.getElementById('z-logo').style.display = l ? 'block' : 'none';
+
+        const b = document.getElementById('b-sel').value;
+        const mIdx = document.getElementById('m-sel').value;
+        const y = document.getElementById('y-sel').value;
+        const mName = (b && mIdx !== "") ? cars[b][mIdx].m : "";
+        
+        document.getElementById('sum-text').innerText = (b && mName && y) ? `${b} ${mName} (${y})` : "Araç seçimi bekleniyor...";
+        document.getElementById('sum-detail').innerText = `${pI.dataset.name} Zemin / ${kI.dataset.name} Kenarlık`;
+
+        document.getElementById('price-tag').innerText = (h ? 1948 : 1599).toLocaleString('tr-TR') + ",00 ₺";
+    }
+
+    function clickAddon(id) {
+        if(event.target.type !== 'checkbox') {
+            document.getElementById(id).checked = !document.getElementById(id).checked;
+            refresh();
+        }
+    }
+
+    initUI();
+    refresh();
+</script>
+</body>
+</html>

@@ -3,359 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POLMAT AUTO DESIGN | Premium Konfigüratör</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <title>POLMAT AUTO DESIGN | Türkiye'de Tek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #1d4ed8;
-            --primary-green: #15a015;
+            --bg-dark: #050505;
             --wa-green: #25d366;
-            --bg-dark: #0a0a0a;
-            --card-white: #ffffff;
-            --accent-red: #c00;
+            --neon-red: #ff0000;
+            --neon-green: #39ff14;
+            --primary-blue: #1d4ed8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-dark); color: #fff; padding: 15px; }
-        .container { max-width: 1350px; margin: 0 auto; }
 
-        /* HEADER */
-        .brand-header { margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .brand-header h1 { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
-        .brand-header span { color: var(--accent-red); }
+        body { background-color: var(--bg-dark); color: #fff; overflow-x: hidden; }
 
-        /* ARAÇ SEÇİMİ */
-        .vehicle-nav {
-            background: #1a1a1a; padding: 15px; border-radius: 12px;
-            margin-bottom: 15px; display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 15px; border: 1px solid #333;
+        /* Header */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid #1a1a1a;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .input-box { display: flex; flex-direction: column; gap: 5px; }
-        .input-box label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; }
-        select {
-            padding: 10px; border-radius: 8px; border: 1px solid #444;
-            background: #252525; color: white; font-size: 13px; outline: none; cursor: pointer;
+
+        .logo-link {
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease;
         }
-        select:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* ANA PANEL */
-        .config-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
-        .preview-box {
-            background-color: #f3f4f6; border-radius: 15px; position: relative;
-            min-height: 600px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid #333;
+        .logo-link:hover {
+            transform: scale(1.02);
         }
-        .layers { position: relative; width: 500px; height: 500px; }
-        .layers img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: all 0.2s ease-in-out; }
 
-        #z-base { z-index: 10; } #z-border { z-index: 20; } #z-heel { z-index: 30; } #z-logo { z-index: 40; }
+        .logo h1 { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
+        .logo span { color: #c00; }
 
-        /* SEÇENEK PANELİ */
-        .options-box {
-            background-color: var(--card-white); border-radius: 15px; padding: 20px;
-            color: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 850px; overflow-y: auto;
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), 
+                url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
         }
-        .section-h { font-size: 12px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; color: #444; }
-        .section-h::after { content: ''; flex: 1; height: 1px; background: #eee; }
 
-        /* DESEN SEÇİMİ RADİO STİLİ */
-        .pattern-options { display: flex; gap: 15px; margin-bottom: 20px; }
-        .pattern-btn { 
-            flex: 1; background: #f8f9fa; border: 2px solid #eee; padding: 10px; border-radius: 10px; 
-            cursor: pointer; text-align: center; transition: 0.2s;
+        .hero-content { max-width: 1100px; padding: 0 20px; }
+
+        .hero-content h2 {
+            font-size: clamp(35px, 6vw, 75px);
+            font-weight: 900;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -2px;
         }
-        .pattern-btn input { display: none; }
-        .pattern-btn span { font-size: 11px; font-weight: 700; color: #666; }
-        .pattern-btn p { font-size: 10px; color: #999; margin-top: 2px; }
-        .pattern-btn:has(input:checked) { border-color: var(--primary-blue); background: #f0f7ff; }
-        .pattern-btn:has(input:checked) span { color: var(--primary-blue); }
 
-        .swatch-container { display: grid; gap: 8px; margin-bottom: 20px; }
-        #paspas-colors { grid-template-columns: repeat(6, 1fr); }
-        #kenar-colors { grid-template-columns: repeat(9, 1fr); }
-
-        .swatch { cursor: pointer; text-align: center; }
-        .swatch input { display: none; }
-        .swatch-thumb { width: 100%; aspect-ratio: 1; border-radius: 6px; border: 1px solid #eee; background-size: cover; background-position: center; transition: 0.2s; }
-        .swatch input:checked + .swatch-thumb { border-color: var(--primary-blue); transform: scale(1.15); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
-        .swatch span { font-size: 7px; font-weight: 700; color: #888; margin-top: 3px; display: block; text-transform: uppercase; }
-
-        .addon-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
-        .addon-row:hover { background: #f9f9f9; }
-        .addon-info h4 { font-size: 11px; font-weight: 800; }
-        .addon-info p { font-size: 10px; color: #999; }
-        .cb { width: 18px; height: 18px; accent-color: var(--primary-blue); cursor: pointer; }
-
-        /* ALT PANEL */
-        .bottom-bar {
-            background: #fff; border-radius: 15px; padding: 25px; margin-top: 20px;
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; color: #111; align-items: center;
+        .highlight-white { color: #fff; display: block; margin-bottom: 5px; }
+        .highlight-green { 
+            color: var(--neon-green); 
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.5); 
+            display: block;
+            margin-bottom: 5px;
         }
-        .contact-info { font-size: 13px; line-height: 1.5; color: #555; }
-        .contact-info h5 { color: #000; font-weight: 800; text-transform: uppercase; font-size: 11px; margin-bottom: 5px; }
+        .highlight-red { 
+            color: var(--neon-red); 
+            text-shadow: 0 0 25px rgba(255, 0, 0, 0.7); 
+            display: block;
+            margin-bottom: 5px;
+        }
+        .highlight-sub {
+            color: #fff;
+            display: block;
+            font-size: clamp(24px, 4vw, 48px);
+            letter-spacing: 0px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
 
-        .total-price { font-size: 24px; font-weight: 900; color: #000; letter-spacing: -0.5px; display: block; }
-        .price-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; }
+        .btn-cta {
+            margin-top: 45px;
+            display: inline-block;
+            background: var(--primary-blue);
+            color: #fff;
+            padding: 22px 55px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(29, 78, 216, 0.4);
+        }
 
-        .btn-act { display: flex; flex-direction: column; gap: 8px; }
-        .button { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.3s; text-align: center; text-decoration: none; display: block; }
-        .btn-buy { background: var(--primary-green); color: white; }
-        .btn-contact { background: var(--wa-green); color: white; }
-        .button:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-cta:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(29, 78, 216, 0.6);
+        }
 
-        @media (max-width: 950px) { .config-grid { grid-template-columns: 1fr; } .bottom-bar { grid-template-columns: 1fr; text-align: center; } }
+        /* --- GÖRSEL ŞÖLEN KATMANI (TRANSITION OVERLAY) --- */
+        #transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        #transition-overlay.active {
+            transform: translateY(0);
+        }
+
+        .loader-logo {
+            font-size: clamp(24px, 5vw, 42px);
+            font-weight: 900;
+            margin-bottom: 30px;
+            opacity: 0;
+            letter-spacing: -1px;
+        }
+
+        .loader-logo span { color: #c00; }
+
+        #transition-overlay.active .loader-logo {
+            animation: logoFadeUp 0.6s 0.5s forwards ease-out;
+        }
+
+        .loader-bar-container {
+            width: 250px;
+            height: 3px;
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-bar-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: var(--primary-blue);
+            box-shadow: 0 0 15px var(--primary-blue);
+        }
+
+        #transition-overlay.active .loader-bar-progress {
+            animation: progressFill 1.5s 0.7s forwards cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        @keyframes logoFadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes progressFill {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 80px 5% 40px;
+            border-top: 1px solid #111;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+        }
+
+        .footer-col h4 { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-col p, .footer-col a { color: #888; font-size: 14px; text-decoration: none; margin-bottom: 12px; display: block; transition: 0.3s; }
+        .footer-col a:hover { color: #fff; }
+
+        .insta-link:hover { color: #E1306C !important; }
+        .wa-link:hover { color: #25D366 !important; }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #1a1a1a;
+            text-align: center;
+            font-size: 12px;
+            color: #444;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h2 { letter-spacing: -1px; }
+            .btn-cta { padding: 18px 40px; width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header class="brand-header"><h1>POLMAT <span>AUTO DESIGN</span></h1></header>
-
-    <div class="vehicle-nav">
-        <div class="input-box"><label>Araç Markası</label><select id="b-sel" onchange="loadModels()"><option value="">Marka Seçin...</option></select></div>
-        <div class="input-box"><label>Model</label><select id="m-sel" disabled onchange="loadYears()"><option value="">Önce Marka</option></select></div>
-        <div class="input-box"><label>Model Yılı</label><select id="y-sel" disabled onchange="refresh()"><option value="">Önce Model</option></select></div>
-    </div>
-
-    <div class="config-grid">
-        <div class="preview-box">
-            <div class="layers">
-                <img src="images/EVA/paspas-takimi-bej.png" id="z-base">
-                <img src="images/kenarlik/4-mattclass-paspas-kenarlik-pembe.png" id="z-border">
-                <img src="images/topukluk/paspas-takimi-metal-topukluk.png" id="z-heel" style="display:none;">
-                <img src="images/logo/paspas-takimi-marka-logo.png" id="z-logo" style="display:none;">
-            </div>
-        </div>
-
-        <div class="options-box">
-            <h3 class="section-h">Paspas Deseni</h3>
-            <div class="pattern-options">
-                <label class="pattern-btn">
-                    <input type="radio" name="ptn" value="baklava" checked onchange="refresh()">
-                    <span>BAKLAVA DESEN</span>
-                    <p>Standart Fiyat</p>
-                </label>
-                <label class="pattern-btn">
-                    <input type="radio" name="ptn" value="petek" onchange="refresh()">
-                    <span>PETEK DESEN</span>
-                    <p>+500 ₺</p>
-                </label>
-            </div>
-
-            <h3 class="section-h">Paspas Rengi (EVA)</h3>
-            <div class="swatch-container" id="paspas-colors"></div>
-
-            <h3 class="section-h">Kenarlık Rengi</h3>
-            <div class="swatch-container" id="kenar-colors"></div>
-
-            <h3 class="section-h">Eklentiler</h3>
-            <div class="addon-row" onclick="clickAddon('cb-heel')">
-                <div class="addon-info" style="display:flex; align-items:center; gap:10px;">
-                    <input type="checkbox" id="cb-heel" class="cb" onchange="refresh()">
-                    <div><h4>METAL TOPUKLUK</h4><p>Konfor ve dayanıklılık (+349 ₺)</p></div>
-                </div>
-            </div>
-            <div class="addon-row" onclick="clickAddon('cb-logo')">
-                <div class="addon-info" style="display:flex; align-items:center; gap:10px;">
-                    <input type="checkbox" id="cb-logo" class="cb" onchange="refresh()">
-                    <div><h4>MARKA LOGOSU</h4><p>Nakışlı Logo (+250 ₺)</p></div>
-                </div>
-            </div>
+    <div id="transition-overlay">
+        <div class="loader-logo">POLMAT <span>AUTO DESIGN</span></div>
+        <div class="loader-bar-container">
+            <div class="loader-bar-progress"></div>
         </div>
     </div>
 
-    <div class="bottom-bar">
-        <div class="contact-info">
-            <h5>POLMAT İLETİŞİM</h5>
-            <p>📞 +90 538 041 19 66</p>
-            <p>📍 İstanbul, Türkiye</p>
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo"><h1>POLMAT <span>AUTO DESIGN</span></h1></div>
+        </a>
+        <nav style="display: flex; gap: 20px;">
+            <a href="https://wa.me/905380411966" style="color:var(--wa-green); text-decoration:none; font-weight:800; font-size:12px; border: 1px solid var(--wa-green); padding: 8px 15px; border-radius: 5px;">WHATSAPP DESTEK</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>
+                <span class="highlight-white">TÜRKİYE'de tek</span>
+                <span class="highlight-green">fosforlu topukluk</span>
+                <span class="highlight-red">taraftara özel kenarlık</span>
+                <span class="highlight-sub">seçeneklerimizle sizlerleyiz</span>
+            </h2>
+            <button onclick="startTransition()" class="btn-cta">TASARLAMAYA BAŞLA</button>
         </div>
-        <div>
-            <p id="sum-text" style="font-weight: 800; font-size: 14px;">Lütfen araç seçimi yapınız.</p>
-            <span class="price-label">Hesaplanan Tutar Aralığı</span>
-            <div class="total-price" id="price-tag">1.599,00 ₺ - 1.899,00 ₺</div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>POLMAT AUTO DESIGN</h4>
+                <p>Türkiye'nin en kapsamlı konfigüratörüne sahip EVA paspas üreticisi.</p>
+            </div>
+            <div class="footer-col">
+                <h4>İLETİŞİM & ADRES</h4>
+                <p><i class="fas fa-phone" style="color: var(--wa-green); margin-right: 10px;"></i> +90 538 041 19 66</p>
+                <p><i class="fas fa-envelope" style="color: var(--primary-blue); margin-right: 10px;"></i> info@polmat.com</p>
+                <p><i class="fas fa-map-marker-alt" style="color: var(--neon-red); margin-right: 10px;"></i> İkitelli Organize Sanayi Bölgesi, İstanbul</p>
+            </div>
+            <div class="footer-col">
+                <h4>BİZİ TAKİP EDİN</h4>
+                <a href="https://instagram.com/polmatauto" class="insta-link" target="_blank"><i class="fab fa-instagram" style="margin-right: 10px;"></i> instagram.com/polmatauto</a>
+                <a href="https://wa.me/905380411966" class="wa-link" target="_blank"><i class="fab fa-whatsapp" style="margin-right: 10px;"></i> WhatsApp Sipariş Hattı</a>
+            </div>
         </div>
-        <div class="btn-act">
-            <a href="#" id="wa-order" class="button btn-buy">Doğrudan Sipariş</a>
-            <a href="https://wa.me/905380411966" target="_blank" class="button btn-contact">WhatsApp İletişim</a>
+        <div class="footer-bottom">
+            &copy; 2026 POLMAT AUTO DESIGN. TÜM HAKLARI SAKLIDIR.
         </div>
-    </div>
-</div>
+    </footer>
 
-<script>
-    const matColors = [
-        { name: "BEJ", file: "paspas-takimi-bej.png" }, { name: "BORDO", file: "paspas-takimi-bordo.png" },
-        { name: "FÜME", file: "paspas-takimi-fume.png" }, { name: "GRİ", file: "paspas-takimi-gri.png" },
-        { name: "KAHVE", file: "paspas-takimi-kahve.png" }, { name: "KIRMIZI", file: "paspas-takimi-kirmizi.png" },
-        { name: "LACİV.", file: "paspas-takimi-lacivert.png" }, { name: "PEMBE", file: "paspas-takimi-pembe.png" },
-        { name: "SİYAH", file: "paspas-takimi-siyah.png" }, { name: "TABA", file: "paspas-takimi-taba.png" },
-        { name: "TURUNCU", file: "paspas-takimi-turuncu-taba.png" }
-    ];
+    <script>
+        function startTransition() {
+            const overlay = document.getElementById('transition-overlay');
+            
+            // Perdeyi yukarı çek
+            overlay.classList.add('active');
 
-    const borderColors = [
-        { name: "PEMBE", file: "paspas-takimi-kenarlik-pembe.png", hex: "#D87093" },
-        { name: "A.YEŞİL", file: "paspas-takimi-kenarlik-acik-yesil.png", hex: "#9ACD32" },
-        { name: "TURUNCU", file: "paspas-takimi-kenarlik-turuncu.png", hex: "#FF8C00" },
-        { name: "TURKUAZ", file: "paspas-takimi-kenarlik-turkuaz.png", hex: "#40E0D0" },
-        { name: "TABA", file: "paspas-takimi-kenarlik-taba.png", hex: "#8B4513" },
-        { name: "SİYAH", file: "paspas-takimi-kenarlik-siyah.png", hex: "#000000" },
-        { name: "SARI", file: "paspas-takimi-kenarlik-sari.png", hex: "#FFD700" },
-        { name: "MOR", file: "paspas-takimi-kenarlik-mor.png", hex: "#800080" },
-        { name: "MAVİ", file: "paspas-takimi-kenarlik-mavi.png", hex: "#0000FF" },
-        { name: "LACİV.", file: "paspas-takimi-kenarlik-lacivert.png", hex: "#000080" },
-        { name: "K.YEŞİL", file: "paspas-takimi-kenarlik-koyu-yesil.png", hex: "#006400" },
-        { name: "KIRMIZI", file: "paspas-takimi-kenarlik-kirmizi.png", hex: "#FF0000" },
-        { name: "KAHVE", file: "paspas-takimi-kenarlik-kahve.png", hex: "#4B3621" },
-        { name: "GRİ", file: "paspas-takimi-kenarlik-gri.png", hex: "#808080" },
-        { name: "FÜME", file: "paspas-takimi-kenarlik-fume.png", hex: "#3B3B3B" },
-        { name: "BORDO", file: "paspas-takimi-kenarlik-bordo.png", hex: "#800000" },
-        { name: "BEJ", file: "paspas-takimi-kenarlik-bej.png", hex: "#F5F5DC" }
-    ];
-
-    const cars = {
-        "Abarth": [{m:"500",s:2008,p:1.1}, {m:"595",s:2012,p:1.1}, {m:"695",s:2010,p:1.2}],
-        "Aion": [{m:"V",s:2020,p:1.2}, {m:"S",s:2019,p:1.1}, {m:"LX",s:2019,p:1.3}],
-        "Alfa Romeo": [{m:"Giulietta",s:2010,e:2020,p:1.1}, {m:"Giulia",s:2016,p:1.3}, {m:"Stelvio",s:2017,p:1.5}, {m:"Tonale",s:2022,p:1.3}, {m:"159",s:2005,e:2011,p:1.1}, {m:"Mito",s:2008,e:2018,p:1.0}, {m:"147",s:2000,e:2010,p:1.1}, {m:"156",s:1997,e:2007,p:1.1}],
-        "Alpine": [{m:"A110",s:2017,p:1.5}],
-        "Anadol": [{m:"A1",s:1966,e:1975,p:0.9}, {m:"A2",s:1970,e:1981,p:0.9}, {m:"STC-16",s:1973,e:1975,p:1.0}],
-        "Arora": [{m:"S1",s:2020,p:0.8}, {m:"M1",s:2021,p:0.8}],
-        "Aston Martin": [{m:"DBX",s:2020,p:2.5}, {m:"Vantage",s:2005,p:2.5}, {m:"DB11",s:2016,p:2.5}, {m:"DBS",s:2007,p:2.5}, {m:"Rapide",s:2010,p:2.5}],
-        "Audi": [{m:"A1",s:2010,p:1.0}, {m:"A3 Sedan",s:2013,p:1.1}, {m:"A3 Sportback",s:1996,p:1.1}, {m:"A4",s:1994,p:1.2}, {m:"A5",s:2007,p:1.2}, {m:"A6",s:1994,p:1.4}, {m:"A7",s:2010,p:1.5}, {m:"A8",s:1994,p:1.7}, {m:"Q2",s:2016,p:1.2}, {m:"Q3",s:2011,p:1.2}, {m:"Q5",s:2008,p:1.4}, {m:"Q7",s:2005,p:1.7}, {m:"Q8",s:2018,p:1.8}, {m:"RS Serisi",s:1994,p:1.7}, {m:"e-tron",s:2018,p:1.6}],
-        "Bentley": [{m:"Continental",s:2003,p:3.0}, {m:"Bentayga",s:2015,p:3.0}, {m:"Flying Spur",s:2005,p:3.0}],
-        "BMW": [{m:"1 Serisi",s:2004,p:1.1}, {m:"2 Serisi",s:2014,p:1.1}, {m:"3 Serisi",s:1975,p:1.2}, {m:"4 Serisi",s:2013,p:1.2}, {m:"5 Serisi",s:1972,p:1.4}, {m:"6 Serisi",s:1976,p:1.4}, {m:"7 Serisi",s:1977,p:1.7}, {m:"8 Serisi",s:1989,p:1.7}, {m:"X1",s:2009,p:1.2}, {m:"X2",s:2017,p:1.2}, {m:"X3",s:2003,p:1.4}, {m:"X4",s:2014,p:1.4}, {m:"X5",s:1999,p:1.6}, {m:"X6",s:2008,p:1.6}, {m:"X7",s:2018,p:1.9}, {m:"iX",s:2021,p:1.7}, {m:"i4",s:2021,p:1.3}, {m:"i7",s:2022,p:1.8}, {m:"M Serisi",s:1972,p:1.6}],
-        "Buick": [{m:"Enclave",s:2007,p:1.5}, {m:"Encore",s:2012,p:1.2}],
-        "BYD": [{m:"Atto 3",s:2022,p:1.2}, {m:"Han",s:2020,p:1.4}, {m:"Tang",s:2018,p:1.5}, {m:"Seal",s:2022,p:1.3}],
-        "Cadillac": [{m:"Escalade",s:1999,p:1.9}, {m:"XT5",s:2016,p:1.5}, {m:"CTS",s:2002,e:2019,p:1.3}],
-        "Chery": [{m:"Omoda 5",s:2022,p:1.1}, {m:"Tiggo 7 Pro",s:2020,p:1.2}, {m:"Tiggo 8 Pro",s:2020,p:1.4}],
-        "Chevrolet": [{m:"Aveo",s:2002,e:2020,p:0.9}, {m:"Cruze",s:2008,e:2023,p:1.0}, {m:"Captiva",s:2006,p:1.3}, {m:"Camaro",s:1966,p:1.5}, {m:"Corvette",s:1953,p:1.8}, {m:"Spark",s:1998,p:0.8}, {m:"Trax",s:2012,p:1.1}],
-        "Chrysler": [{m:"300C",s:2004,p:1.4}, {m:"Grand Voyager",s:1988,p:1.5}],
-        "Citroen": [{m:"C3",s:2002,p:0.9}, {m:"C3 Aircross",s:2017,p:1.1}, {m:"C4",s:2004,p:1.0}, {m:"C4 X",s:2022,p:1.1}, {m:"C5 Aircross",s:2017,p:1.3}, {m:"C-Elysee",s:2012,p:1.0}, {m:"Ami",s:2020,p:0.7}, {m:"Berlingo",s:1996,p:1.2}],
-        "Cupra": [{m:"Formentor",s:2020,p:1.3}, {m:"Leon",s:2020,p:1.2}, {m:"Ateca",s:2020,p:1.3}, {m:"Born",s:2021,p:1.2}],
-        "Dacia": [{m:"Sandero",s:2008,p:0.9}, {m:"Sandero Stepway",s:2009,p:1.0}, {m:"Duster",s:2010,p:1.1}, {m:"Jogger",s:2022,p:1.3}, {m:"Lodgy",s:2012,e:2022,p:1.3}, {m:"Logan",s:2004,p:0.9}],
-        "Daewoo": [{m:"Lanos",s:1997,e:2002,p:0.9}, {m:"Matiz",s:1998,e:2005,p:0.8}],
-        "Daihatsu": [{m:"Terios",s:1997,p:1.0}, {m:"Sirion",s:1998,p:0.9}, {m:"Cuore",s:1980,p:0.8}],
-        "Dodge": [{m:"Challenger",s:1970,p:1.6}, {m:"Charger",s:1966,p:1.6}, {m:"Ram",s:1981,p:1.9}],
-        "DS Automobiles": [{m:"DS 3",s:2009,p:1.1}, {m:"DS 4",s:2011,p:1.2}, {m:"DS 7",s:2017,p:1.4}, {m:"DS 9",s:2020,p:1.5}],
-        "Ferrari": [{m:"458",s:2009,e:2015,p:3.0}, {m:"488",s:2015,e:2019,p:3.0}, {m:"F8",s:2019,p:3.0}, {m:"Roma",s:2020,p:3.0}, {m:"SF90",s:2019,p:3.0}],
-        "Fiat": [{m:"Egea Sedan",s:2015,p:1.0}, {m:"Egea Cross",s:2021,p:1.1}, {m:"Egea HB",s:2015,p:1.0}, {m:"500",s:2007,p:0.9}, {m:"500X",s:2014,p:1.2}, {m:"500L",s:2012,p:1.2}, {m:"Panda",s:1980,p:0.8}, {m:"Doblo",s:2000,p:1.3}, {m:"Fiorino",s:1977,p:1.0}, {m:"Linea",s:2007,e:2018,p:1.0}, {m:"Punto",s:1993,e:2018,p:0.9}, {m:"Albea",s:2002,e:2012,p:0.9}, {m:"Palio",s:1996,e:2011,p:0.9}],
-        "Ford": [{m:"Fiesta",s:1976,e:2023,p:0.9}, {m:"Focus",s:1998,p:1.1}, {m:"Puma",s:2019,p:1.1}, {m:"Kuga",s:2008,p:1.3}, {m:"Mondeo",s:1992,e:2022,p:1.2}, {m:"Mustang Mach-E",s:2020,p:1.6}, {m:"Courier",s:2014,p:1.1}, {m:"Connect",s:2002,p:1.2}, {m:"Transit",s:1965,p:1.5}, {m:"Ranger",s:1983,p:1.6}],
-        "Geely": [{m:"Emgrand",s:2009,p:1.0}],
-        "Honda": [{m:"Civic",s:1972,p:1.1}, {m:"City",s:1981,p:1.0}, {m:"Accord",s:1976,p:1.3}, {m:"HR-V",s:1998,p:1.2}, {m:"CR-V",s:1995,p:1.4}, {m:"Jazz",s:2001,p:1.0}, {m:"NSX",s:1990,p:2.5}],
-        "Hyundai": [{m:"i10",s:2007,p:0.8}, {m:"i20",s:2008,p:1.0}, {m:"i30",s:2007,p:1.1}, {m:"Elantra",s:1990,p:1.1}, {m:"Bayon",s:2021,p:1.1}, {m:"Kona",s:2017,p:1.1}, {m:"Tucson",s:2004,p:1.4}, {m:"Santa Fe",s:2000,p:1.6}, {m:"Ioniq 5",s:2021,p:1.5}, {m:"Ioniq 6",s:2022,p:1.5}, {m:"Staria",s:2021,p:1.8}, {m:"Accent Blue",s:2011,e:2019,p:1.0}, {m:"Accent Era",s:2006,e:2012,p:1.0}, {m:"Getz",s:2002,e:2011,p:0.9}],
-        "Jaguar": [{m:"XF",s:2007,p:1.5}, {m:"XE",s:2015,p:1.4}, {m:"F-Pace",s:2016,p:1.7}, {m:"I-Pace",s:2018,p:1.7}],
-        "Kia": [{m:"Picanto",s:2004,p:0.8}, {m:"Rio",s:2000,p:0.9}, {m:"Stonic",s:2017,p:1.1}, {m:"Ceed",s:2006,p:1.1}, {m:"XCeed",s:2019,p:1.2}, {m:"Sportage",s:1993,p:1.4}, {m:"Sorento",s:2002,p:1.6}, {m:"Niro",s:2016,p:1.3}, {m:"EV6",s:2021,p:1.5}, {m:"EV9",s:2023,p:1.9}, {m:"Cerato",s:2003,p:1.1}],
-        "Lada": [{m:"Niva",s:1977,p:1.0}, {m:"Samara",s:1984,e:2013,p:0.8}, {m:"Vega",s:1995,e:2009,p:0.9}],
-        "Lamborghini": [{m:"Urus",s:2018,p:3.0}, {m:"Huracan",s:2014,p:3.0}, {m:"Aventador",s:2011,e:2022,p:3.0}],
-        "Lancia": [{m:"Delta",s:1979,e:2014,p:1.1}, {m:"Ypsilon",s:1995,p:1.0}],
-        "Lexus": [{m:"RX",s:1998,p:1.7}, {m:"NX",s:2014,p:1.5}, {m:"ES",s:1989,p:1.5}, {m:"LS",s:1989,p:1.8}],
-        "Mercedes-Benz": [{m:"A Serisi",s:1997,p:1.1}, {m:"B Serisi",s:2005,p:1.2}, {m:"C Serisi",s:1993,p:1.3}, {m:"E Serisi",s:1993,p:1.5}, {m:"S Serisi",s:1972,p:1.9}, {m:"CLA",s:2013,p:1.3}, {m:"CLS",s:2004,p:1.6}, {m:"GLA",s:2013,p:1.2}, {m:"GLB",s:2019,p:1.4}, {m:"GLC",s:2015,p:1.5}, {m:"GLE",s:2015,p:1.7}, {m:"GLS",s:2016,p:1.9}, {m:"G Serisi",s:1979,p:2.2}, {m:"EQS",s:2021,p:2.0}, {m:"Vito",s:1996,p:1.6}],
-        "Nissan": [{m:"Micra",s:1982,p:0.8}, {m:"Juke",s:2010,p:1.1}, {m:"Qashqai",s:2006,p:1.3}, {m:"X-Trail",s:2000,p:1.5}, {m:"Navara",s:1985,p:1.6}],
-        "Opel": [{m:"Corsa",s:1982,p:0.9}, {m:"Astra",s:1991,p:1.1}, {m:"Mokka",s:2012,p:1.1}, {m:"Combo",s:1986,p:1.2}, {m:"Insignia",s:2008,e:2022,p:1.3}],
-        "Peugeot": [{m:"208",s:2012,p:0.9}, {m:"308",s:2007,p:1.1}, {m:"408",s:2022,p:1.2}, {m:"3008",s:2008,p:1.4}, {m:"5008",s:2009,p:1.6}, {m:"Rifter",s:2018,p:1.4}],
-        "Renault": [{m:"Clio",s:1990,p:0.9}, {m:"Taliant",s:2021,p:1.0}, {m:"Megane Sedan",s:1995,p:1.1}, {m:"Austral",s:2022,p:1.4}, {m:"Captur",s:2013,p:1.1}, {m:"Kangoo",s:1997,p:1.3}],
-        "Seat": [{m:"Ibiza",s:1984,p:0.9}, {m:"Leon",s:1998,p:1.1}, {m:"Arona",s:2017,p:1.1}, {m:"Ateca",s:2016,p:1.3}],
-        "Skoda": [{m:"Fabia",s:1999,p:0.9}, {m:"Scala",s:2019,p:1.1}, {m:"Octavia",s:1996,p:1.2}, {m:"Superb",s:2001,p:1.4}, {m:"Karoq",s:2017,p:1.3}, {m:"Kodiaq",s:2016,p:1.6}],
-        "Tesla": [{m:"Model 3",s:2017,p:1.4}, {m:"Model Y",s:2020,p:1.6}, {m:"Model S",s:2012,p:1.8}],
-        "Tofaş": [{m:"Şahin",s:1988,e:2002,p:0.8}, {m:"Doğan",s:1988,e:2002,p:0.8}, {m:"Kartal",s:1988,e:2003,p:0.9}, {m:"Serçe",s:1984,e:1994,p:0.8}],
-        "TOGG": [{m:"T10X",s:2023,p:1.4}],
-        "Toyota": [{m:"Yaris",s:1999,p:0.9}, {m:"Corolla",s:1966,p:1.1}, {m:"C-HR",s:2016,p:1.2}, {m:"Rav4",s:1994,p:1.5}, {m:"Hilux",s:1968,p:1.7}],
-        "Volkswagen": [{m:"Polo",s:1975,p:0.9}, {m:"Golf",s:1974,p:1.1}, {m:"Passat",s:1973,p:1.3}, {m:"Tiguan",s:2007,p:1.4}, {m:"Arteon",s:2017,p:1.5}, {m:"Caddy",s:1980,p:1.3}, {m:"Amarok",s:2010,p:1.7}, {m:"Transporter",s:1950,p:1.8}],
-        "Volvo": [{m:"S60",s:2000,p:1.3}, {m:"S90",s:1996,p:1.6}, {m:"XC40",s:2017,p:1.4}, {m:"XC60",s:2008,p:1.6}, {m:"XC90",s:2002,p:1.9}],
-        "XEV": [{m:"Yoyo",s:2021,p:0.8}],
-        "Yuki": [{m:"Amy",s:2022,p:0.7}]
-    };
-
-    function initUI() {
-        const pC = document.getElementById('paspas-colors');
-        const kC = document.getElementById('kenar-colors');
-        const bS = document.getElementById('b-sel');
-
-        matColors.forEach((c, i) => {
-            pC.innerHTML += `<label class="swatch"><input type="radio" name="p" value="${c.file}" data-name="${c.name}" ${i===0?'checked':''} onchange="refresh()"><div class="swatch-thumb" style="background-image: url('images/EVA/${c.file}');"></div><span>${c.name}</span></label>`;
-        });
-
-        borderColors.forEach((c, i) => {
-            kC.innerHTML += `<label class="swatch"><input type="radio" name="k" value="${c.file}" data-name="${c.name}" ${i===0?'checked':''} onchange="refresh()"><div class="swatch-thumb" style="background-color: ${c.hex};"></div><span>${c.name}</span></label>`;
-        });
-
-        Object.keys(cars).sort().forEach(b => bS.innerHTML += `<option value="${b}">${b}</option>`);
-    }
-
-    function loadModels() {
-        const b = document.getElementById('b-sel').value;
-        const mS = document.getElementById('m-sel');
-        const yS = document.getElementById('y-sel');
-        mS.innerHTML = '<option value="">Model Seçin</option>';
-        yS.innerHTML = '<option value="">Yıl Seçin</option>';
-        if(b && cars[b]) {
-            cars[b].forEach((mo, i) => mS.innerHTML += `<option value="${i}">${mo.m}</option>`);
-            mS.disabled = false;
-        } else { mS.disabled = true; }
-        refresh();
-    }
-
-    function loadYears() {
-        const b = document.getElementById('b-sel').value;
-        const mI = document.getElementById('m-sel').value;
-        const yS = document.getElementById('y-sel');
-        yS.innerHTML = '<option value="">Yıl Seçin</option>';
-        if(mI !== "" && cars[b]) {
-            const d = cars[b][mI];
-            const end = d.e || 2026;
-            for(let i = 2026; i >= d.s; i--) { if(i <= end) yS.innerHTML += `<option value="${i}">${i}</option>`; }
-            yS.disabled = false;
-        } else { yS.disabled = true; }
-        refresh();
-    }
-
-    function refresh() {
-        const dInput = document.querySelector('input[name="ptn"]:checked').value;
-        const pI = document.querySelector('input[name="p"]:checked');
-        const kI = document.querySelector('input[name="k"]:checked');
-        const h = document.getElementById('cb-heel').checked;
-        const l = document.getElementById('cb-logo').checked;
-
-        if(pI) document.getElementById('z-base').src = `images/EVA/${pI.value}`;
-        if(kI) document.getElementById('z-border').src = `images/kenarlik/${kI.value}`;
-        document.getElementById('z-heel').style.display = h ? 'block' : 'none';
-        document.getElementById('z-logo').style.display = l ? 'block' : 'none';
-
-        const b = document.getElementById('b-sel').value;
-        const mIdx = document.getElementById('m-sel').value;
-        const y = document.getElementById('y-sel').value;
-        const modelData = (b && mIdx !== "") ? cars[b][mIdx] : null;
-        const mName = modelData ? modelData.m : "";
-        
-        // Fiyat Hesaplama
-        let baseMin = 1599, baseMax = 1899;
-        if(modelData) {
-            baseMin *= modelData.p;
-            baseMax *= modelData.p;
+            // 2 saniye sonra sayfayı değiştir
+            // Bu süre, animasyonun akıcı bir şekilde tamamlanmasını sağlar
+            setTimeout(() => {
+                window.location.href = "configurator.html"; 
+            }, 2200);
         }
-        
-        // Desen Fiyatı
-        if(dInput === 'petek') { baseMin += 500; baseMax += 500; }
 
-        // Eklentiler
-        if(h) { baseMin += 349; baseMax += 349; }
-        if(l) { baseMin += 250; baseMax += 250; }
+        // Kullanıcı geri tuşuna basarsa overlay'i gizle
+        window.onpageshow = function(event) {
+            if (event.persisted) {
+                document.getElementById('transition-overlay').classList.remove('active');
+            }
+        };
+    </script>
 
-        document.getElementById('sum-text').innerText = (b && mName && y) ? `${b} ${mName} (${y})` : "Araç seçimi bekleniyor...";
-        document.getElementById('price-tag').innerText = `${Math.round(baseMin).toLocaleString('tr-TR')} ₺ - ${Math.round(baseMax).toLocaleString('tr-TR')} ₺`;
-
-        // WhatsApp Link
-        const msg = `Merhaba, POLMAT üzerinden sipariş vermek istiyorum:%0A🚗 Araç: ${b} ${mName} (${y})%0A🧶 Desen: ${dInput === 'petek' ? 'Petek' : 'Baklava'}%0A🎨 Paspas: ${pI.dataset.name}%0A🎞️ Kenarlık: ${kI.dataset.name}%0A⚙️ Topukluk: ${h ? 'Var':'Yok'}%0A🏷️ Logo: ${l ? 'Var':'Yok'}%0A💰 Tahmini Tutar: ${Math.round(baseMin).toLocaleString('tr-TR')} - ${Math.round(baseMax).toLocaleString('tr-TR')} TL`;
-        document.getElementById('wa-order').href = `https://wa.me/905380411966?text=${msg}`;
-    }
-
-    function clickAddon(id) {
-        if(event.target.type !== 'checkbox') {
-            document.getElementById(id).checked = !document.getElementById(id).checked;
-            refresh();
-        }
-    }
-
-    initUI();
-    refresh();
-</script>
 </body>
 </html>

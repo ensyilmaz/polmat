@@ -52,10 +52,22 @@
         /* SEÇENEK PANELİ */
         .options-box {
             background-color: var(--card-white); border-radius: 15px; padding: 20px;
-            color: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 800px; overflow-y: auto;
+            color: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 850px; overflow-y: auto;
         }
         .section-h { font-size: 12px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; color: #444; }
         .section-h::after { content: ''; flex: 1; height: 1px; background: #eee; }
+
+        /* DESEN SEÇİMİ RADİO STİLİ */
+        .pattern-options { display: flex; gap: 15px; margin-bottom: 20px; }
+        .pattern-btn { 
+            flex: 1; background: #f8f9fa; border: 2px solid #eee; padding: 10px; border-radius: 10px; 
+            cursor: pointer; text-align: center; transition: 0.2s;
+        }
+        .pattern-btn input { display: none; }
+        .pattern-btn span { font-size: 11px; font-weight: 700; color: #666; }
+        .pattern-btn p { font-size: 10px; color: #999; margin-top: 2px; }
+        .pattern-btn:has(input:checked) { border-color: var(--primary-blue); background: #f0f7ff; }
+        .pattern-btn:has(input:checked) span { color: var(--primary-blue); }
 
         .swatch-container { display: grid; gap: 8px; margin-bottom: 20px; }
         #paspas-colors { grid-template-columns: repeat(6, 1fr); }
@@ -78,7 +90,7 @@
             background: #fff; border-radius: 15px; padding: 25px; margin-top: 20px;
             display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; color: #111; align-items: center;
         }
-        .contact-info { font-size: 13px; color: #555; }
+        .contact-info { font-size: 13px; line-height: 1.5; color: #555; }
         .contact-info h5 { color: #000; font-weight: 800; text-transform: uppercase; font-size: 11px; margin-bottom: 5px; }
 
         .total-price { font-size: 24px; font-weight: 900; color: #000; letter-spacing: -0.5px; display: block; }
@@ -115,7 +127,21 @@
         </div>
 
         <div class="options-box">
-            <h3 class="section-h">Paspas Rengi</h3>
+            <h3 class="section-h">Paspas Deseni</h3>
+            <div class="pattern-options">
+                <label class="pattern-btn">
+                    <input type="radio" name="ptn" value="baklava" checked onchange="refresh()">
+                    <span>BAKLAVA DESEN</span>
+                    <p>Standart Fiyat</p>
+                </label>
+                <label class="pattern-btn">
+                    <input type="radio" name="ptn" value="petek" onchange="refresh()">
+                    <span>PETEK DESEN</span>
+                    <p>+500 ₺</p>
+                </label>
+            </div>
+
+            <h3 class="section-h">Paspas Rengi (EVA)</h3>
             <div class="swatch-container" id="paspas-colors"></div>
 
             <h3 class="section-h">Kenarlık Rengi</h3>
@@ -282,6 +308,7 @@
     }
 
     function refresh() {
+        const dInput = document.querySelector('input[name="ptn"]:checked').value;
         const pI = document.querySelector('input[name="p"]:checked');
         const kI = document.querySelector('input[name="k"]:checked');
         const h = document.getElementById('cb-heel').checked;
@@ -298,22 +325,25 @@
         const modelData = (b && mIdx !== "") ? cars[b][mIdx] : null;
         const mName = modelData ? modelData.m : "";
         
-        // FİYAT HESAPLAMA MANTIĞI
+        // Fiyat Hesaplama
         let baseMin = 1599, baseMax = 1899;
         if(modelData) {
             baseMin *= modelData.p;
             baseMax *= modelData.p;
         }
         
-        // Eklentiler (Kuruşu kuruşuna eklenir)
+        // Desen Fiyatı
+        if(dInput === 'petek') { baseMin += 500; baseMax += 500; }
+
+        // Eklentiler
         if(h) { baseMin += 349; baseMax += 349; }
         if(l) { baseMin += 250; baseMax += 250; }
 
         document.getElementById('sum-text').innerText = (b && mName && y) ? `${b} ${mName} (${y})` : "Araç seçimi bekleniyor...";
         document.getElementById('price-tag').innerText = `${Math.round(baseMin).toLocaleString('tr-TR')} ₺ - ${Math.round(baseMax).toLocaleString('tr-TR')} ₺`;
 
-        // WhatsApp Link Güncelleme
-        const msg = `Merhaba, POLMAT üzerinden sipariş vermek istiyorum:%0A🚗 Araç: ${b} ${mName} (${y})%0A🎨 Paspas: ${pI.dataset.name}%0A🎞️ Kenarlık: ${kI.dataset.name}%0A⚙️ Topukluk: ${h ? 'Var (+349₺)':'Yok'}%0A🏷️ Logo: ${l ? 'Var (+250₺)':'Yok'}%0A💰 Tahmini Tutar: ${Math.round(baseMin).toLocaleString('tr-TR')} - ${Math.round(baseMax).toLocaleString('tr-TR')} TL`;
+        // WhatsApp Link
+        const msg = `Merhaba, POLMAT üzerinden sipariş vermek istiyorum:%0A🚗 Araç: ${b} ${mName} (${y})%0A🧶 Desen: ${dInput === 'petek' ? 'Petek' : 'Baklava'}%0A🎨 Paspas: ${pI.dataset.name}%0A🎞️ Kenarlık: ${kI.dataset.name}%0A⚙️ Topukluk: ${h ? 'Var':'Yok'}%0A🏷️ Logo: ${l ? 'Var':'Yok'}%0A💰 Tahmini Tutar: ${Math.round(baseMin).toLocaleString('tr-TR')} - ${Math.round(baseMax).toLocaleString('tr-TR')} TL`;
         document.getElementById('wa-order').href = `https://wa.me/905380411966?text=${msg}`;
     }
 
